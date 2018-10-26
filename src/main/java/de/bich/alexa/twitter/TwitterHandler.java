@@ -63,8 +63,8 @@ public class TwitterHandler {
     	return twitter.getUserTimeline(username);
     }
 	
-	public static Status getLatestStatusByUser(String username) throws TwitterException {
-		return findTweetsByUser(username).get(0);
+	public static TwitterStatus getLatestStatusByUser(String username) throws TwitterException {
+		return convert(findTweetsByUser(username).get(0));
 	}
 	
 	private static TwitterStatus convert(Status status) {
