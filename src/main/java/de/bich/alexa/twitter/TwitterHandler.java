@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
 import de.bich.alexa.model.TwitterStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -13,31 +17,32 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+@Component
 public class TwitterHandler {
 	
-	public static final String API_KEY_PROPERTY = "API_KEY";
+	public final String API_KEY_PROPERTY = "API_KEY";
 
-    public static final String API_SECRET_PROPERTY = "API_SECRET";
+    public final String API_SECRET_PROPERTY = "API_SECRET";
 
-    public static final String TOKEN_PROPERTY = "TOKEN_KEY";
+    public final String TOKEN_PROPERTY = "TOKEN_KEY";
 
-    public static final String TOKEN_SECRET_PROPERTY = "TOKEN_SECRET";
+    public final String TOKEN_SECRET_PROPERTY = "TOKEN_SECRET";
 
     // security values needed for connecting to the twitter account (defined in config.properties)
-    private static String apiKey;
+    private String apiKey;
 
-    private static String apiSecret;
+    private String apiSecret;
 
-    private static String token;
+    private String token;
 
-    private static String tokenSecret;
+    private String tokenSecret;
 
     // connection to twitter
-    private static Twitter twitter;
+    private Twitter twitter;
 
-
-	static {
-		final Properties prop = new Properties();
+    @PostConstruct
+    public void init() {
+    	final Properties prop = new Properties();
 
         try (final InputStream input = TwitterHandler.class.getResourceAsStream("/config.properties")) {
             // load a properties file
@@ -58,9 +63,9 @@ public class TwitterHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+    }
 	
-	public static List<TwitterStatus> findTweetsByUser(String username) throws TwitterException{
+	public List<TwitterStatus> findTweetsByUser(String username) throws TwitterException{
     	List<TwitterStatus> statusList = new ArrayList<>();
 		for (Status s:twitter.getUserTimeline(username)) {
 			statusList.add(convert(s));
@@ -68,11 +73,11 @@ public class TwitterHandler {
 		return statusList;
     }
 	
-	public static TwitterStatus getLatestStatusByUser(String username) throws TwitterException {
+	public TwitterStatus getLatestStatusByUser(String username) throws TwitterException {
 		return findTweetsByUser(username).get(0);
 	}
 	
-	private static TwitterStatus convert(Status status) {
+	private TwitterStatus convert(Status status) {
     	TwitterStatus twitterStatus = new TwitterStatus();
     	twitterStatus.setStatusTimeStamp(status.getCreatedAt());
     	twitterStatus.setText(status.getText());

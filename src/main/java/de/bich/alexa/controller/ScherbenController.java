@@ -14,10 +14,13 @@ public class ScherbenController {
 	
 	@Autowired
 	private TwitterStatusService service;
+	
+	@Autowired
+	private TwitterHandler twitterHandler;
 
 	@GetMapping(value="/scherben")
 	public TwitterStatus getTweets() throws TwitterException{
-		return TwitterHandler.getLatestStatusByUser("Scherben81");
+		return twitterHandler.getLatestStatusByUser("Scherben81");
 	}
 	
 }
