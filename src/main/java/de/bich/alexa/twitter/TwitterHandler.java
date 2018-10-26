@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import de.bich.alexa.model.TwitterStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -66,4 +67,13 @@ public class TwitterHandler {
 		return findTweetsByUser(username).get(0);
 	}
 	
+	private static TwitterStatus convert(Status status) {
+    	TwitterStatus twitterStatus = new TwitterStatus();
+    	twitterStatus.setStatusTimeStamp(status.getCreatedAt());
+    	twitterStatus.setText(status.getText());
+    	twitterStatus.setTwitterStatusId(status.getId());
+    	twitterStatus.setTwitterUserId(status.getUser().getId());
+    	twitterStatus.setUsername(status.getUser().getScreenName());
+    	return twitterStatus;
+    }
 }

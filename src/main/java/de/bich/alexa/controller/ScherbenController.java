@@ -1,13 +1,13 @@
 package de.bich.alexa.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.bich.alexa.model.TwitterStatus;
 import de.bich.alexa.service.TwitterStatusService;
+import de.bich.alexa.twitter.TwitterHandler;
+import twitter4j.Status;
+import twitter4j.TwitterException;
 
 @RestController
 public class ScherbenController {
@@ -16,9 +16,8 @@ public class ScherbenController {
 	private TwitterStatusService service;
 
 	@GetMapping(value="/scherben")
-	public List<TwitterStatus> getTweets(){
-		List<TwitterStatus> statusList = service.findAll();
-		return statusList;
+	public Status getTweets() throws TwitterException{
+		return TwitterHandler.getLatestStatusByUser("Scherben81");
 	}
 	
 }
