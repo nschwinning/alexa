@@ -2,6 +2,7 @@ package de.bich.alexa.twitter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -59,12 +60,16 @@ public class TwitterHandler {
 		}
 	}
 	
-	public static List<Status> findTweetsByUser(String username) throws TwitterException{
-    	return twitter.getUserTimeline(username);
+	public static List<TwitterStatus> findTweetsByUser(String username) throws TwitterException{
+    	List<TwitterStatus> statusList = new ArrayList<>();
+		for (Status s:twitter.getUserTimeline(username)) {
+			statusList.add(convert(s));
+		}
+		return statusList;
     }
 	
 	public static TwitterStatus getLatestStatusByUser(String username) throws TwitterException {
-		return convert(findTweetsByUser(username).get(0));
+		return findTweetsByUser(username).get(0);
 	}
 	
 	private static TwitterStatus convert(Status status) {
